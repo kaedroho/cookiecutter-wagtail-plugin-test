@@ -14,11 +14,9 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        include:
-          - toxenv: py38-dj22-wa211-sqlite
-            python: 3.8
-          - toxenv: py38-dj31-wa211-sqlite
-            python: 3.8
+        python: [3.7, 3.8]
+        django: [2.2, 3.0, 3.1]
+        wagtail: [2.11]
 
     steps:
       - uses: actions/checkout@v2
@@ -33,25 +31,15 @@ jobs:
         run: |
           tox
         env:
-          TOXENV: ${{ matrix.toxenv }}
+          TOXENV: py${{ matrix.python }}-dj${{ matrix.django }}-wa${{ matrix.wagtail }}-sqlite
 
   test-postgres:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        include:
-          - toxenv: py37-dj22-wa211-postgres
-            python: 3.7
-          - toxenv: py38-dj22-wa211-postgres
-            python: 3.8
-          - toxenv: py37-dj30-wa211-postgres
-            python: 3.7
-          - toxenv: py38-dj30-wa211-postgres
-            python: 3.8
-          - toxenv: py38-dj31-wa211-postgres
-            python: 3.8
-          - toxenv: py38-dj31-wamaster-postgres
-            python: 3.8
+        python: [3.7, 3.8]
+        django: [2.2, 3.0, 3.1]
+        wagtail: [2.11]
 
     services:
       postgres:
@@ -74,4 +62,4 @@ jobs:
           tox
         env:
           DATABASE_URL: postgres://postgres:postgres@localhost:5432/wagtail_localize_git
-          TOXENV: ${{ matrix.toxenv }}
+          TOXENV: py${{ matrix.python }}-dj${{ matrix.django }}-wa${{ matrix.wagtail }}-postgres
